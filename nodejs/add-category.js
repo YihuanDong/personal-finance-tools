@@ -1,32 +1,26 @@
 const fs = require('fs');
-const { parse } = require('csv-parse');
+const csvParser = require('csv-parser');
 
 const filePath = './nodejs/test-file.csv';
-
-const csvParser = parse(
-  {
-    columns: true
-  }
-);
-
-const result = [];
+const records = [];
 const headers = [];
 
 fs.createReadStream(filePath)
-  .pipe(csvParser)
+  .pipe(csvParser())
   .on('data', (row) => {
-    result.push(row);
+    records.push(row);
   })
-  .on('headers', (data) => {
-    headers = data;
+  .on('headers', (row) => {
+    headers.push(...row);
   })
   .on('error', (error) => {
-    console.log(error);
+    console.err(error);
   })
   .on('end', processData);
 
 
 function processData() {
-  console.log(result.length);
-  console.log(result[0]);
+  console.log(records.length);
+  console.log(records[0]);
+  console.log(headers);
 }
