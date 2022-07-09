@@ -1,11 +1,13 @@
-const fs = require('fs');
-const csvParser = require('csv-parser');
+import { createReadStream } from 'fs';
+import { csvParser } from 'csv-parser';
+import { CATEGORY } from './category-mapping';
 
 const filePath = './nodejs/test-file.csv';
 const records = [];
 const headers = [];
 
-fs.createReadStream(filePath)
+
+createReadStream(filePath)
   .pipe(csvParser())
   .on('data', (row) => {
     records.push(row);
@@ -23,4 +25,10 @@ function processData() {
   console.log(records.length);
   console.log(records[0]);
   console.log(headers);
+
+  records.forEach((row) => {
+    Object.entries(CATEGORY).forEach((category) => {
+      
+    })
+  })
 }
